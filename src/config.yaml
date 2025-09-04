@@ -1,0 +1,10 @@
+application_version: 0.1.0
+
+access_key: "${AWS_ACCESS_KEY}"
+secret_key: "${AWS_SECRET_KEY}"
+
+bucket_name: "${S3_BUCKET_NAME}"
+bucket_region: "${S3_REGION}"
+
+local_path: "${LOCAL_VAULT_PATH}" # The directory containing the vault, not the vault root
+vault_name: "${VAULT_NAME}"
