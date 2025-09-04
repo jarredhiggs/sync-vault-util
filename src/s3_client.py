@@ -22,8 +22,6 @@ class S3Client():
             region_name=self.bucket_region,
         )
         
-        self.upload_vault()
-        
     def _collect_local_files(self) -> list[str]:
         local_files = []
         directory = join(self.local_path, self.vault_name)
@@ -38,7 +36,7 @@ class S3Client():
         local_files = self._collect_local_files()
         s3_target_keys = {x.replace("\\", "/") for x in local_files}
 
-        debug("Uploading: " + local_files)
+        debug(f"Uploading: {len(local_files)} files.")
         for local_file in local_files:
             full_local_path = join(self.local_path, local_file)
             s3_key = local_file.replace("\\", "/")
@@ -68,7 +66,7 @@ class S3Client():
         # TODO: delete_payload does not work with more than 1000 items. Add support for multiple delete requests
         keys_to_delete = list(keys_to_delete)
         
-        debug("Keys to delete: " + keys_to_delete)
+        debug(f"Keys to delete: {keys_to_delete}")
         
         if len(keys_to_delete) > 0:
             delete_payload = {
@@ -91,8 +89,14 @@ class S3Client():
                 print(f"!!!!+++++++++++++INCOMPLETE REMOVAL OF DELETED FILES FROM S3+++++++++++++!!!!")
                 exit(1)
     
+    def _backup_local(self):
+        pass
+    
+    def _delete_backup(self):
+        pass
+    
     def download_vault(self):
         pass
     
-    def replace_old_local(self):
+    def full_sync(self):
         pass
