@@ -1,4 +1,5 @@
 from os.path import dirname, join
+import sys
 
 from dotenv import load_dotenv
 
@@ -27,10 +28,19 @@ def execute(command):
     global s3_client
     
     commands = {
-        "upload": s3_client.upload_vault,
-        "download": s3_client.download_vault,
-        "sync": s3_client.download_vault
+        "sync": s3_client.upload_vault,
+        "download_remote": s3_client.download_vault,
+        "quit": exit
     }
+    
+    aliases = {
+        "upload": "sync",
+        "use_remote": "download_remote",
+        "download": "download_remote",
+        "exit": "quit",
+    }
+    
+    command = aliases[command] if command in aliases else command
     
     if command not in commands:
         print(f"\"{command}\" is not a valid command. Available commands are {list(commands.keys())}")
@@ -40,6 +50,11 @@ def execute(command):
 
 if __name__ == "__main__":
     startup()
+    
+    if len(sys.argv) > 1:
+        execute(sys.argv[1])
+        sys.exit(0)
+    
     while True:
         command = input(">> ").strip().lower()
         
