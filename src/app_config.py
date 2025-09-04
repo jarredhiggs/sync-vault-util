@@ -17,7 +17,6 @@ class AppConfig:
         except yaml.YAMLError as e:
             print(f"Error parsing YAML file: {e}")
             return None
-
         return AppConfig(configuration)
     
     def get(self, *properties: str) -> str | dict:
@@ -32,7 +31,7 @@ class AppConfig:
             match = re.match(env_pattern, value)
             if match is not None:
                 env_var = match.group(1)
-                value = os.environ[env_var] if env_var in os.environ else match.group(0)
+                value = os.environ.get(env_var) or match.group(0)
             
             values[property] = value
             
