@@ -25,11 +25,9 @@ VAULT_NAME="My Vault" # The vault's root directory
 `pip install -r requirements.txt`
 
 # Usage
+Execute `vault_sync.py` with one of the following arguments:
 
-#### Perform Sync
-Synchronize your vault with `vault_sync.py sync`. Your remote vault on S3 will be overwritten with your local vault.
-
-## Interactive
-Execute `vault_sync.py` without arguments. Commands:
-  - **sync**: The main operation. 
+  - **sync**: The main operation. Uploads local vault to s3.
   - **download**: Downloads the vault from the S3 bucket, overwriting the local vault. Perform a local backup first to be safe.
+  - **backup**: Creates a local backup in the same parent directory as the vault.
+  - **interactive / -i**: Launch an interactive loop for entering commands. Good for testing.

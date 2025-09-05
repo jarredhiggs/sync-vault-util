@@ -23,13 +23,15 @@ def startup() -> None:
     if not s3_client:
         s3_client = S3Client(config.get("access_key", "secret_key", "bucket_name", "bucket_region", "local_path", "vault_name"))
 
-def execute(command):
+def execute(command: str) -> None:
     global config
     global s3_client
     
     commands = {
         "sync": s3_client.upload_vault,
         "download_remote": s3_client.download_vault,
+        "backup": s3_client.backup_local,
+        "interactive (-i)": interactive_loop,
         "quit": exit
     }
     
@@ -37,7 +39,10 @@ def execute(command):
         "upload": "sync",
         "use_remote": "download_remote",
         "download": "download_remote",
-        "exit": "quit",
+        "backup_local": "backup",
+        "interactive": "interactive (-i)",
+        "-i": "interactive (-i)",
+        "exit": "quit"
     }
     
     command = aliases[command] if command in aliases else command
@@ -48,13 +53,7 @@ def execute(command):
     
     commands[command]()
 
-if __name__ == "__main__":
-    startup()
-    
-    if len(sys.argv) > 1:
-        execute(sys.argv[1])
-        sys.exit(0)
-    
+def interactive_loop() -> None:
     while True:
         command = input(">> ").strip().lower()
         
@@ -62,3 +61,13 @@ if __name__ == "__main__":
             continue 
         
         execute(command)
+    
+
+if __name__ == "__main__":
+    startup()
+    
+    if len(sys.argv) > 1:
+        execute(sys.argv[1])
+        sys.exit(0)
+    
+    print("No arguments provided! Available options are `sync`, `download`, `backup`, `interactive / -i`, `help`")
